@@ -33,7 +33,7 @@ export default function FinalPodium() {
         initial={{ opacity: 0, y: -30 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.5, duration: 1.0 }}
-        className="relative z-10 text-center mt-6 sm:mt-8 mb-4 sm:mb-6 px-4"
+        className="relative z-10 text-center mt-12 sm:mt-16 lg:mt-20 mb-4 sm:mb-6 px-4"
       >
         <p
           className="text-xs uppercase tracking-[0.3em] sm:tracking-[0.4em] mb-2 opacity-50"
