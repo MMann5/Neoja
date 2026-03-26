@@ -1,0 +1,234 @@
+@import url('https://fonts.googleapis.com/css2?family=Anton&family=Bebas+Neue&family=Inter:wght@300;400;500;600&display=swap');
+
+@import "tailwindcss";
+
+:root {
+  /* Neoja brand palette */
+  --bg-dark: #0a0a12;
+  --bg-deep: #0f0f1e;
+  --bg-court: #1a1028;
+  --bg-purple: #2d1854;
+  --neoja-orange: #ff6b00;
+  --neoja-orange-bright: #ff8c2a;
+  --neoja-purple: #6b2fa0;
+  --neoja-purple-deep: #4a1a7a;
+  --neoja-yellow: #ffd100;
+  --gold-crown: #ffd700;
+  --gold-rich: #f5a623;
+  --gold-pale: #fff1c1;
+  --silver-gleam: #c0d8f0;
+  --bronze-warm: #cd7f32;
+  --text-primary: #f0f0ff;
+  --text-muted: #a0a0c0;
+
+  /* Font families */
+  --font-display: 'Anton', sans-serif;
+  --font-heading: 'Bebas Neue', sans-serif;
+  --font-body: 'Inter', sans-serif;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html, body, #root {
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  background: var(--bg-dark);
+  color: var(--text-primary);
+  font-family: var(--font-body);
+}
+
+/* Noise texture overlay */
+.noise-overlay {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 100;
+  opacity: 0.04;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='1'/%3E%3C/svg%3E");
+  background-size: 256px 256px;
+}
+
+/* Scanline overlay */
+.scanlines {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 99;
+  background: repeating-linear-gradient(
+    0deg,
+    transparent,
+    transparent 3px,
+    rgba(255, 107, 0, 0.008) 3px,
+    rgba(255, 107, 0, 0.008) 6px
+  );
+}
+
+/* Keyframes */
+@keyframes pulse-glow {
+  0%, 100% { opacity: 0.5; transform: scale(1); }
+  50% { opacity: 1; transform: scale(1.08); }
+}
+
+@keyframes float-up {
+  0% { transform: translateY(100vh) scale(0); opacity: 0; }
+  10% { opacity: 1; }
+  90% { opacity: 1; }
+  100% { transform: translateY(-10vh) scale(1); opacity: 0; }
+}
+
+@keyframes shimmer {
+  0% { background-position: -200% center; }
+  100% { background-position: 200% center; }
+}
+
+@keyframes screen-shake {
+  0%, 100% { transform: translate(0, 0) rotate(0deg); }
+  10% { transform: translate(-5px, -3px) rotate(-0.5deg); }
+  20% { transform: translate(5px, 3px) rotate(0.5deg); }
+  30% { transform: translate(-4px, 4px) rotate(-0.4deg); }
+  40% { transform: translate(4px, -4px) rotate(0.4deg); }
+  50% { transform: translate(-3px, 2px) rotate(-0.3deg); }
+  60% { transform: translate(3px, -2px) rotate(0.3deg); }
+  70% { transform: translate(-2px, 3px) rotate(-0.2deg); }
+  80% { transform: translate(2px, -3px) rotate(0.2deg); }
+  90% { transform: translate(-1px, -1px) rotate(0deg); }
+}
+
+.shake {
+  animation: screen-shake 0.6s ease-out;
+}
+
+@keyframes shockwave {
+  0% {
+    box-shadow: 0 0 0 0 rgba(255, 107, 0, 0.7);
+    opacity: 1;
+  }
+  100% {
+    box-shadow: 0 0 0 180px rgba(255, 107, 0, 0);
+    opacity: 0;
+  }
+}
+
+@keyframes gold-flash {
+  0% { opacity: 0; }
+  15% { opacity: 0.9; }
+  100% { opacity: 0; }
+}
+
+@keyframes card-idle-breathe {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-5px); }
+}
+
+@keyframes court-line-pulse {
+  0%, 100% { opacity: 0.1; }
+  50% { opacity: 0.25; }
+}
+
+@keyframes bounce-in {
+  0% { transform: translateY(-30px); }
+  40% { transform: translateY(0); }
+  60% { transform: translateY(-8px); }
+  80% { transform: translateY(0); }
+  90% { transform: translateY(-3px); }
+  100% { transform: translateY(0); }
+}
+
+/* Orange shimmer text */
+.orange-shimmer-text {
+  background: linear-gradient(
+    90deg,
+    var(--neoja-orange) 0%,
+    var(--neoja-yellow) 25%,
+    #ffffff 50%,
+    var(--neoja-yellow) 75%,
+    var(--neoja-orange) 100%
+  );
+  background-size: 200% auto;
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  animation: shimmer 3s linear infinite;
+  filter: drop-shadow(0 0 20px rgba(255, 107, 0, 0.5));
+}
+
+/* Gold shimmer text */
+.gold-shimmer-text {
+  background: linear-gradient(
+    90deg,
+    var(--gold-crown) 0%,
+    #fff8dc 25%,
+    #ffffff 50%,
+    #fff8dc 75%,
+    var(--gold-crown) 100%
+  );
+  background-size: 200% auto;
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  animation: shimmer 3s linear infinite;
+  filter: drop-shadow(0 0 15px rgba(255, 215, 0, 0.5));
+}
+
+/* Card gradient borders */
+.card-border-gold {
+  background: linear-gradient(135deg, var(--gold-crown), var(--neoja-orange), var(--gold-crown));
+  padding: 3px;
+  border-radius: 16px;
+}
+
+.card-border-silver {
+  background: linear-gradient(135deg, var(--silver-gleam), #6a8aaa, var(--silver-gleam));
+  padding: 2px;
+  border-radius: 12px;
+}
+
+.card-border-bronze {
+  background: linear-gradient(135deg, var(--bronze-warm), #8a5520, var(--bronze-warm));
+  padding: 2px;
+  border-radius: 12px;
+}
+
+/* Court gradient base */
+.court-gradient {
+  background:
+    radial-gradient(ellipse at 50% 110%, var(--bg-purple) 0%, transparent 50%),
+    radial-gradient(ellipse at 50% -10%, rgba(255,107,0,0.08) 0%, transparent 40%),
+    linear-gradient(180deg, var(--bg-dark) 0%, var(--bg-deep) 40%, var(--bg-court) 100%);
+}
+
+/* Court lines decoration */
+.court-lines {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  overflow: hidden;
+  animation: court-line-pulse 4s ease-in-out infinite;
+}
+
+.court-lines::before {
+  content: '';
+  position: absolute;
+  bottom: 15%;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 300px;
+  height: 300px;
+  border: 2px solid rgba(255, 107, 0, 0.12);
+  border-radius: 50%;
+}
+
+.court-lines::after {
+  content: '';
+  position: absolute;
+  bottom: 15%;
+  left: 10%;
+  right: 10%;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, rgba(255, 107, 0, 0.1), transparent);
+}
