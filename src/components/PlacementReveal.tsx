@@ -2,7 +2,6 @@ import { useEffect, useRef } from 'react';
 import { motion } from 'motion/react';
 import type { Contestant } from '../data/contestants';
 import { useAudio } from '../hooks/useAudio';
-import { useVoice } from '../hooks/useVoice';
 import confetti from 'canvas-confetti';
 import CourtSVG from './CourtSVG';
 
@@ -56,7 +55,6 @@ const itemVariants = {
 
 export default function PlacementReveal({ contestant }: Props) {
   const { playRevealSting } = useAudio();
-  const { speakReveal } = useVoice();
   const fxDone = useRef(false);
 
   const colors = rankColors[contestant.rank];
@@ -66,10 +64,6 @@ export default function PlacementReveal({ contestant }: Props) {
     fxDone.current = true;
 
     playRevealSting(contestant.rank);
-    // Announce the player name with a slight delay
-    setTimeout(() => {
-      speakReveal(contestant.rank, contestant.name);
-    }, 500);
 
     if (contestant.rank === 1) {
       const flash = document.createElement('div');

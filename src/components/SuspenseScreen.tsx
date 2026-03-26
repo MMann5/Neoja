@@ -54,7 +54,7 @@ export default function SuspenseScreen() {
           style={{ background: 'linear-gradient(90deg, transparent, var(--neoja-orange), transparent)' }}
         />
 
-        {/* "And the champion is..." text */}
+        {/* "And the winner is..." text */}
         <motion.p
           initial={{ opacity: 0, y: 15 }}
           animate={{ opacity: 0.8, y: 0 }}
@@ -66,7 +66,7 @@ export default function SuspenseScreen() {
             color: 'var(--text-primary)',
           }}
         >
-          And the champion is...
+          And the winner is...
         </motion.p>
 
         {/* Big question mark — main focal point */}
