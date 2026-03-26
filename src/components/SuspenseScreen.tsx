@@ -1,23 +1,20 @@
 import { motion } from 'motion/react';
 import { useAudio } from '../hooks/useAudio';
 import { useEffect, useRef } from 'react';
-
 export default function SuspenseScreen() {
-  const { playCountdownTick } = useAudio();
+  const { playAnnouncerSequence } = useAudio();
   const hasPlayed = useRef(false);
 
   useEffect(() => {
     if (hasPlayed.current) return;
     hasPlayed.current = true;
 
-    const ticks = [0, 800, 1400, 1800, 2100, 2350, 2550, 2700, 2820, 2920, 3000, 3060, 3120, 3170];
-    const timers = ticks.map((t) => setTimeout(() => playCountdownTick(), t));
+    playAnnouncerSequence();
 
     return () => {
-      timers.forEach(clearTimeout);
       hasPlayed.current = false;
     };
-  }, [playCountdownTick]);
+  }, [playAnnouncerSequence]);
 
   return (
     <motion.div

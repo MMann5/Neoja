@@ -3,6 +3,7 @@ import { motion } from 'motion/react';
 import type { Contestant } from '../data/contestants';
 import { useAudio } from '../hooks/useAudio';
 import confetti from 'canvas-confetti';
+import CourtSVG from './CourtSVG';
 
 interface Props {
   contestant: Contestant;
@@ -29,6 +30,26 @@ const rankColors: Record<number, { glow: string; accent: string; textClass: stri
     glow: 'rgba(205,127,50,0.25)',
     accent: '#cd7f32',
     textClass: '',
+  },
+};
+
+// Stagger variants for card content
+const containerVariants = {
+  hidden: {},
+  visible: {
+    transition: {
+      staggerChildren: 0.08,
+      delayChildren: 0.4,
+    },
+  },
+};
+
+const itemVariants = {
+  hidden: { opacity: 0, y: 15 },
+  visible: {
+    opacity: 1,
+    y: 0,
+    transition: { duration: 0.4, ease: [0.22, 1, 0.36, 1] },
   },
 };
 
@@ -63,12 +84,15 @@ export default function PlacementReveal({ contestant }: Props) {
 
       setTimeout(() => {
         const cols = ['#FFD700', '#FF6B00', '#FFF1C1', '#FF8C2A', '#FFD100'];
-        confetti({ particleCount: 180, spread: 120, origin: { y: 0.45, x: 0.5 }, colors: cols, ticks: 200, gravity: 0.5, scalar: 1.3 });
+        confetti({ particleCount: 200, spread: 130, origin: { y: 0.4, x: 0.5 }, colors: cols, ticks: 250, gravity: 0.4, scalar: 1.4 });
         setTimeout(() => {
-          confetti({ particleCount: 90, spread: 70, origin: { y: 0.5, x: 0.25 }, colors: cols, ticks: 160 });
-          confetti({ particleCount: 90, spread: 70, origin: { y: 0.5, x: 0.75 }, colors: cols, ticks: 160 });
-        }, 400);
-      }, 350);
+          confetti({ particleCount: 100, spread: 80, origin: { y: 0.5, x: 0.2 }, colors: cols, ticks: 180 });
+          confetti({ particleCount: 100, spread: 80, origin: { y: 0.5, x: 0.8 }, colors: cols, ticks: 180 });
+        }, 500);
+        setTimeout(() => {
+          confetti({ particleCount: 60, spread: 50, origin: { y: 0.3, x: 0.5 }, colors: cols, ticks: 120, scalar: 0.8 });
+        }, 1000);
+      }, 300);
     }
 
     return () => { fxDone.current = false; };
@@ -80,7 +104,6 @@ export default function PlacementReveal({ contestant }: Props) {
       ? 'card-border-silver'
       : 'card-border-bronze';
 
-  // Simple, reliable entrance per rank
   const entrance = contestant.rank === 1
     ? { initial: { opacity: 0, y: 200, scale: 0.6 }, animate: { opacity: 1, y: 0, scale: 1 } }
     : contestant.rank === 2
@@ -96,17 +119,17 @@ export default function PlacementReveal({ contestant }: Props) {
       transition={{ duration: 0.3 }}
       className="fixed inset-0 flex items-center justify-center court-gradient z-40"
     >
-      <div className="court-lines" />
+      <CourtSVG glow={contestant.rank === 1} />
 
       {/* Background glow */}
       <motion.div
-        initial={{ opacity: 0, scale: 0.5 }}
+        initial={{ opacity: 0, scale: 0.3 }}
         animate={{ opacity: 1, scale: 1 }}
         transition={{ duration: 1.2 }}
         className="absolute w-[500px] h-[500px] rounded-full pointer-events-none"
         style={{
           background: `radial-gradient(circle, ${colors.glow} 0%, transparent 65%)`,
-          filter: 'blur(80px)',
+          filter: 'blur(60px)',
         }}
       />
 
@@ -133,7 +156,7 @@ export default function PlacementReveal({ contestant }: Props) {
         <motion.div
           initial={{ opacity: 0, y: -15 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.4, duration: 0.5 }}
+          transition={{ delay: 0.3, duration: 0.5 }}
           className="text-center mb-6"
         >
           <p
@@ -143,13 +166,32 @@ export default function PlacementReveal({ contestant }: Props) {
             {rankLabels[contestant.rank]}
           </p>
           <div className="flex items-center justify-center gap-4">
-            <div className="h-[2px] w-16" style={{ background: `linear-gradient(90deg, transparent, ${colors.accent})` }} />
-            <span className="text-3xl">{contestant.icon}</span>
-            <div className="h-[2px] w-16" style={{ background: `linear-gradient(90deg, ${colors.accent}, transparent)` }} />
+            <motion.div
+              initial={{ scaleX: 0 }}
+              animate={{ scaleX: 1 }}
+              transition={{ delay: 0.5, duration: 0.6 }}
+              className="h-[2px] w-16 origin-right"
+              style={{ background: `linear-gradient(90deg, transparent, ${colors.accent})` }}
+            />
+            <motion.span
+              initial={{ scale: 0, rotate: -180 }}
+              animate={{ scale: 1, rotate: 0 }}
+              transition={{ delay: 0.4, type: 'spring', stiffness: 200 }}
+              className="text-3xl"
+            >
+              {contestant.icon}
+            </motion.span>
+            <motion.div
+              initial={{ scaleX: 0 }}
+              animate={{ scaleX: 1 }}
+              transition={{ delay: 0.5, duration: 0.6 }}
+              className="h-[2px] w-16 origin-left"
+              style={{ background: `linear-gradient(90deg, ${colors.accent}, transparent)` }}
+            />
           </div>
         </motion.div>
 
-        {/* Card */}
+        {/* Card with staggered content */}
         <div className={cardBorderClass}>
           <div
             className="rounded-[14px] p-8 sm:p-10 text-center relative overflow-hidden"
@@ -167,9 +209,19 @@ export default function PlacementReveal({ contestant }: Props) {
               }}
             />
 
-            <div className="relative z-10">
-              <div className="text-5xl sm:text-6xl mb-4">{contestant.icon}</div>
-              <h2
+            {/* Staggered content */}
+            <motion.div
+              className="relative z-10"
+              variants={containerVariants}
+              initial="hidden"
+              animate="visible"
+            >
+              <motion.div variants={itemVariants} className="text-5xl sm:text-6xl mb-4">
+                {contestant.icon}
+              </motion.div>
+
+              <motion.h2
+                variants={itemVariants}
                 className={`font-bold mb-2 ${colors.textClass}`}
                 style={{
                   fontFamily: 'var(--font-display)',
@@ -179,36 +231,46 @@ export default function PlacementReveal({ contestant }: Props) {
                 }}
               >
                 {contestant.name}
-              </h2>
-              <p
+              </motion.h2>
+
+              <motion.p
+                variants={itemVariants}
                 className="uppercase tracking-[0.2em] mb-1"
                 style={{ fontFamily: 'var(--font-heading)', fontSize: '0.85rem', color: colors.accent, opacity: 0.8 }}
               >
                 {contestant.position}
-              </p>
-              <p
+              </motion.p>
+
+              <motion.p
+                variants={itemVariants}
                 className="uppercase tracking-widest mb-6 opacity-40"
                 style={{ fontFamily: 'var(--font-heading)', fontSize: '0.75rem' }}
               >
                 {contestant.team}
-              </p>
+              </motion.p>
 
-              <div className="h-[2px] w-28 mx-auto mb-6" style={{ background: `linear-gradient(90deg, transparent, ${colors.accent}, transparent)` }} />
+              <motion.div
+                variants={itemVariants}
+                className="h-[2px] w-28 mx-auto mb-6"
+                style={{ background: `linear-gradient(90deg, transparent, ${colors.accent}, transparent)` }}
+              />
 
-              <p
+              <motion.p
+                variants={itemVariants}
                 className="text-2xl sm:text-3xl font-bold mb-5"
                 style={{ fontFamily: 'var(--font-heading)', color: colors.accent, letterSpacing: '0.05em' }}
               >
                 {contestant.score}
-              </p>
+              </motion.p>
 
-              <p
+              <motion.p
+                variants={itemVariants}
                 className="text-base sm:text-lg italic leading-relaxed opacity-70"
                 style={{ fontFamily: 'var(--font-body)', color: 'var(--text-primary)', fontWeight: 300 }}
               >
                 "{contestant.tagline}"
-              </p>
-            </div>
+              </motion.p>
+            </motion.div>
           </div>
         </div>
       </motion.div>

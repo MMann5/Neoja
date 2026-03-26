@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import { useAudio } from '../hooks/useAudio';
+import CourtSVG from './CourtSVG';
 
 interface Props {
   onComplete: () => void;
@@ -35,8 +36,7 @@ export default function Countdown({ onComplete }: Props) {
       transition={{ duration: 0.3 }}
       className="fixed inset-0 flex items-center justify-center court-gradient z-50"
     >
-      {/* Court lines */}
-      <div className="court-lines" />
+      <CourtSVG />
 
       <AnimatePresence mode="wait">
         {count > 0 ? (

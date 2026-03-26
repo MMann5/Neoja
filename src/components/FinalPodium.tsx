@@ -2,6 +2,7 @@ import { motion } from 'motion/react';
 import { contestants, themeConfig } from '../data/contestants';
 import PodiumCard from './PodiumCard';
 import ParticleCanvas from './ParticleCanvas';
+import CourtSVG from './CourtSVG';
 
 const second = contestants.find((c) => c.rank === 2)!;
 const first = contestants.find((c) => c.rank === 1)!;
@@ -17,8 +18,7 @@ export default function FinalPodium() {
     >
       <ParticleCanvas intensity="high" goldMode />
 
-      {/* Court lines */}
-      <div className="court-lines" />
+      <CourtSVG glow />
 
       {/* Top gold glow */}
       <div

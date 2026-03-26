@@ -1,6 +1,7 @@
 import { motion } from 'motion/react';
 import { themeConfig } from '../data/contestants';
 import ParticleCanvas from './ParticleCanvas';
+import CourtSVG from './CourtSVG';
 
 interface Props {
   onStart: () => void;
@@ -13,7 +14,7 @@ const titleVariants = {
     y: 0,
     scale: 1,
     filter: 'blur(0px)',
-    transition: { duration: 1.4, ease: [0.22, 1, 0.36, 1] },
+    transition: { duration: 1.4, ease: [0.22, 1, 0.36, 1] as const },
   },
 };
 
@@ -22,7 +23,7 @@ const subtitleVariants = {
   visible: {
     opacity: 1,
     y: 0,
-    transition: { duration: 1.0, delay: 0.6, ease: 'easeOut' },
+    transition: { duration: 1.0, delay: 0.6, ease: 'easeOut' as const },
   },
 };
 
@@ -31,7 +32,7 @@ const locationVariants = {
   visible: {
     opacity: 0.8,
     letterSpacing: '0.35em',
-    transition: { duration: 1.8, delay: 1.0, ease: 'easeOut' },
+    transition: { duration: 1.8, delay: 1.0, ease: 'easeOut' as const },
   },
 };
 
@@ -41,7 +42,7 @@ const buttonVariants = {
     opacity: 1,
     scale: 1,
     y: 0,
-    transition: { duration: 0.8, delay: 1.8, type: 'spring', stiffness: 120 },
+    transition: { duration: 0.8, delay: 1.8, type: 'spring' as const, stiffness: 120 },
   },
 };
 
@@ -50,7 +51,7 @@ const lineVariants = {
   visible: {
     scaleX: 1,
     opacity: 0.5,
-    transition: { duration: 1.2, delay: 0.8, ease: [0.22, 1, 0.36, 1] },
+    transition: { duration: 1.2, delay: 0.8, ease: [0.22, 1, 0.36, 1] as const },
   },
 };
 
@@ -63,8 +64,7 @@ export default function AtmosphereScreen({ onStart }: Props) {
     >
       <ParticleCanvas intensity="low" />
 
-      {/* Court lines decoration */}
-      <div className="court-lines" />
+      <CourtSVG />
 
       {/* Orange glow from below */}
       <div
