@@ -51,10 +51,10 @@ export default function Countdown({ onComplete }: Props) {
             animate={{ scale: 1, opacity: 1, filter: 'blur(0px)' }}
             exit={{ scale: 2.5, opacity: 0, filter: 'blur(12px)' }}
             transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] as [number, number, number, number] }}
-            className="orange-shimmer-text"
+            className="orange-shimmer-text text-center relative z-10"
             style={{
               fontFamily: 'var(--font-display)',
-              fontSize: 'clamp(10rem, 25vw, 18rem)',
+              fontSize: 'clamp(8rem, 22vw, 18rem)',
               lineHeight: 1,
             }}
           >
@@ -67,10 +67,10 @@ export default function Countdown({ onComplete }: Props) {
             animate={{ scale: 1, opacity: 1 }}
             exit={{ scale: 2.5, opacity: 0 }}
             transition={{ duration: 0.5, type: 'spring', stiffness: 150, damping: 15 }}
-            className="uppercase tracking-[0.3em] font-bold orange-shimmer-text"
+            className="uppercase tracking-[0.15em] sm:tracking-[0.3em] font-bold orange-shimmer-text text-center w-full px-4 relative z-10"
             style={{
               fontFamily: 'var(--font-display)',
-              fontSize: 'clamp(4rem, 10vw, 8rem)',
+              fontSize: 'clamp(3rem, 12vw, 8rem)',
             }}
           >
             Game Time

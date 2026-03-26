@@ -72,7 +72,7 @@ export default function PodiumCard({ contestant, index }: Props) {
         className="text-center mb-3"
       >
         <span
-          className={`text-5xl font-black ${style.textClass}`}
+          className={`text-3xl sm:text-5xl font-black ${style.textClass}`}
           style={{
             fontFamily: 'var(--font-display)',
             color: style.textClass ? undefined : style.accentColor,
@@ -94,7 +94,7 @@ export default function PodiumCard({ contestant, index }: Props) {
         transition={contestant.rank === 1 ? { duration: 2, repeat: Infinity, ease: 'easeInOut' } : undefined}
       >
         <div
-          className={`rounded-[14px] ${contestant.rank === 1 ? 'p-8' : 'p-6'} text-center relative overflow-hidden ${style.height}`}
+          className={`rounded-[14px] ${contestant.rank === 1 ? 'p-5 sm:p-8' : 'p-4 sm:p-6'} text-center relative overflow-hidden ${style.height}`}
           style={{
             background: contestant.rank === 1
               ? 'linear-gradient(180deg, rgba(25,18,8,0.98) 0%, rgba(12,10,5,0.98) 100%)'
@@ -111,7 +111,7 @@ export default function PodiumCard({ contestant, index }: Props) {
           />
 
           <div className="relative z-10 flex flex-col items-center justify-center">
-            <div className="text-4xl mb-3">{contestant.icon}</div>
+            <div className="text-3xl sm:text-4xl mb-2 sm:mb-3">{contestant.icon}</div>
             <h3
               className={`font-bold mb-1 ${style.textClass}`}
               style={{
@@ -139,14 +139,14 @@ export default function PodiumCard({ contestant, index }: Props) {
             <div className="h-[2px] w-16 mb-4" style={{ background: `linear-gradient(90deg, transparent, ${style.accentColor}, transparent)` }} />
 
             <p
-              className="text-xl font-bold mb-3"
+              className="text-base sm:text-xl font-bold mb-2 sm:mb-3"
               style={{ fontFamily: 'var(--font-heading)', color: style.accentColor, letterSpacing: '0.04em' }}
             >
               {contestant.score}
             </p>
 
             <p
-              className="text-sm italic leading-relaxed opacity-55"
+              className="text-xs sm:text-sm italic leading-relaxed opacity-55"
               style={{ fontFamily: 'var(--font-body)', fontWeight: 300 }}
             >
               "{contestant.tagline}"

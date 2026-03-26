@@ -14,10 +14,9 @@ export default function FinalPodium() {
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       transition={{ duration: 1.2 }}
-      className="fixed inset-0 court-gradient flex flex-col items-center justify-center overflow-hidden"
+      className="fixed inset-0 court-gradient flex flex-col items-center overflow-y-auto overflow-x-hidden"
     >
       <ParticleCanvas intensity="high" goldMode />
-
       <CourtSVG glow />
 
       {/* Top gold glow */}
@@ -34,11 +33,11 @@ export default function FinalPodium() {
         initial={{ opacity: 0, y: -30 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.5, duration: 1.0 }}
-        className="relative z-10 text-center mb-4"
+        className="relative z-10 text-center mt-6 sm:mt-8 mb-4 sm:mb-6 px-4"
       >
         <p
-          className="text-xs uppercase tracking-[0.4em] mb-2 opacity-50"
-          style={{ fontFamily: 'var(--font-heading)', fontSize: '0.8rem' }}
+          className="text-xs uppercase tracking-[0.3em] sm:tracking-[0.4em] mb-2 opacity-50"
+          style={{ fontFamily: 'var(--font-heading)', fontSize: 'clamp(0.6rem, 1.5vw, 0.8rem)' }}
         >
           {themeConfig.subtitle}
         </p>
@@ -46,23 +45,29 @@ export default function FinalPodium() {
           className="gold-shimmer-text font-black"
           style={{
             fontFamily: 'var(--font-display)',
-            fontSize: 'clamp(2rem, 5vw, 3.5rem)',
+            fontSize: 'clamp(1.8rem, 5vw, 3.5rem)',
           }}
         >
           Final Standings
         </h1>
         <div
-          className="mx-auto mt-3 h-[2px] w-48"
+          className="mx-auto mt-3 h-[2px] w-32 sm:w-48"
           style={{ background: 'linear-gradient(90deg, transparent, var(--gold-crown), transparent)' }}
         />
       </motion.div>
 
-      {/* Podium area: cards + stepped platforms */}
-      <div className="relative z-10 flex items-end justify-center gap-0 px-4 w-full max-w-5xl mb-0">
+      {/* === MOBILE: vertical stack (1st → 2nd → 3rd) === */}
+      <div className="relative z-10 flex flex-col items-center gap-4 px-4 w-full sm:hidden pb-8">
+        <PodiumCard contestant={first} index={0} />
+        <PodiumCard contestant={second} index={1} />
+        <PodiumCard contestant={third} index={2} />
+      </div>
+
+      {/* === DESKTOP: horizontal podium with platforms === */}
+      <div className="relative z-10 hidden sm:flex items-end justify-center gap-0 px-4 w-full max-w-5xl flex-1">
         {/* 2nd place — left */}
         <div className="flex flex-col items-center">
           <PodiumCard contestant={second} index={0} />
-          {/* Platform */}
           <motion.div
             initial={{ height: 0, opacity: 0 }}
             animate={{ height: 60, opacity: 1 }}
@@ -76,20 +81,14 @@ export default function FinalPodium() {
             }}
           >
             <div className="flex items-center justify-center h-full">
-              <span
-                className="text-4xl font-black opacity-30"
-                style={{ fontFamily: 'var(--font-display)', color: 'var(--silver-gleam)' }}
-              >
-                2
-              </span>
+              <span className="text-4xl font-black opacity-30" style={{ fontFamily: 'var(--font-display)', color: 'var(--silver-gleam)' }}>2</span>
             </div>
           </motion.div>
         </div>
 
-        {/* 1st place — center (tallest) */}
+        {/* 1st place — center */}
         <div className="flex flex-col items-center">
           <PodiumCard contestant={first} index={1} />
-          {/* Platform */}
           <motion.div
             initial={{ height: 0, opacity: 0 }}
             animate={{ height: 100, opacity: 1 }}
@@ -104,20 +103,14 @@ export default function FinalPodium() {
             }}
           >
             <div className="flex items-center justify-center h-full">
-              <span
-                className="text-5xl font-black gold-shimmer-text"
-                style={{ fontFamily: 'var(--font-display)' }}
-              >
-                1
-              </span>
+              <span className="text-5xl font-black gold-shimmer-text" style={{ fontFamily: 'var(--font-display)' }}>1</span>
             </div>
           </motion.div>
         </div>
 
-        {/* 3rd place — right (shortest) */}
+        {/* 3rd place — right */}
         <div className="flex flex-col items-center">
           <PodiumCard contestant={third} index={2} />
-          {/* Platform */}
           <motion.div
             initial={{ height: 0, opacity: 0 }}
             animate={{ height: 35, opacity: 1 }}
@@ -131,12 +124,7 @@ export default function FinalPodium() {
             }}
           >
             <div className="flex items-center justify-center h-full">
-              <span
-                className="text-3xl font-black opacity-30"
-                style={{ fontFamily: 'var(--font-display)', color: 'var(--bronze-warm)' }}
-              >
-                3
-              </span>
+              <span className="text-3xl font-black opacity-30" style={{ fontFamily: 'var(--font-display)', color: 'var(--bronze-warm)' }}>3</span>
             </div>
           </motion.div>
         </div>
@@ -147,12 +135,11 @@ export default function FinalPodium() {
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ delay: 1.5, duration: 1 }}
-        className="relative z-10 w-full py-4 text-center"
-        style={{ background: 'linear-gradient(0deg, rgba(10,10,18,0.8), transparent)' }}
+        className="relative z-10 w-full py-4 text-center shrink-0"
       >
         <p
-          className="text-xs tracking-[0.3em] uppercase opacity-35"
-          style={{ fontFamily: 'var(--font-heading)', color: 'var(--text-muted)', fontSize: '0.8rem' }}
+          className="text-xs tracking-[0.2em] sm:tracking-[0.3em] uppercase opacity-35"
+          style={{ fontFamily: 'var(--font-heading)', color: 'var(--text-muted)', fontSize: 'clamp(0.6rem, 1.5vw, 0.8rem)' }}
         >
           {themeConfig.tagline}
         </p>
