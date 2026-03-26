@@ -4,13 +4,10 @@ export function useVoice() {
   const voiceRef = useRef<SpeechSynthesisVoice | null>(null);
 
   const getVoice = useCallback(() => {
-    // Always reuse the same voice once picked
     if (voiceRef.current) return voiceRef.current;
 
     const voices = window.speechSynthesis.getVoices();
-    if (voices.length === 0) return null;
-
-    // Pick the first available English voice and lock it
+    // Prefer energetic English voices
     const preferred = [
       'Google US English',
       'Google UK English Male',
@@ -18,6 +15,7 @@ export function useVoice() {
       'Microsoft David',
       'Alex',
       'Daniel',
+      'Samantha',
     ];
 
     for (const name of preferred) {
@@ -29,8 +27,12 @@ export function useVoice() {
     }
 
     const english = voices.find((v) => v.lang.startsWith('en'));
-    voiceRef.current = english ?? voices[0];
-    return voiceRef.current;
+    if (english) {
+      voiceRef.current = english;
+      return english;
+    }
+
+    return voices[0] || null;
   }, []);
 
   const speak = useCallback((text: string, options?: {
@@ -53,14 +55,10 @@ export function useVoice() {
 
   const preload = useCallback(() => {
     window.speechSynthesis.getVoices();
-    // Lock the voice immediately
-    getVoice();
     const warmup = new SpeechSynthesisUtterance('');
     warmup.volume = 0;
-    const v = voiceRef.current;
-    if (v) warmup.voice = v;
     window.speechSynthesis.speak(warmup);
-  }, [getVoice]);
+  }, []);
 
   const speakCountdown = useCallback((number: number) => {
     const words: Record<number, string> = {
