@@ -1,8 +1,11 @@
 import { motion } from 'motion/react';
 import { useAudio } from '../hooks/useAudio';
+import { useVoice } from '../hooks/useVoice';
 import { useEffect, useRef } from 'react';
+
 export default function SuspenseScreen() {
   const { playAnnouncerSequence } = useAudio();
+  const { speakChampion } = useVoice();
   const hasPlayed = useRef(false);
 
   useEffect(() => {
@@ -10,11 +13,12 @@ export default function SuspenseScreen() {
     hasPlayed.current = true;
 
     playAnnouncerSequence();
+    speakChampion();
 
     return () => {
       hasPlayed.current = false;
     };
-  }, [playAnnouncerSequence]);
+  }, [playAnnouncerSequence, speakChampion]);
 
   return (
     <motion.div

@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import { useAudio } from '../hooks/useAudio';
+import { useVoice } from '../hooks/useVoice';
 import CourtSVG from './CourtSVG';
 
 interface Props {
@@ -10,23 +11,27 @@ interface Props {
 export default function Countdown({ onComplete }: Props) {
   const [count, setCount] = useState(3);
   const { playCountdownTick, playCountdownFinal } = useAudio();
+  const { speakCountdown } = useVoice();
 
   useEffect(() => {
     playCountdownTick();
+    speakCountdown(3);
     const interval = setInterval(() => {
       setCount((prev) => {
         if (prev <= 1) {
           clearInterval(interval);
           playCountdownFinal();
+          speakCountdown(0);
           setTimeout(onComplete, 600);
           return 0;
         }
         playCountdownTick();
+        speakCountdown(prev - 1);
         return prev - 1;
       });
-    }, 1000);
+    }, 1200);
     return () => clearInterval(interval);
-  }, [onComplete, playCountdownTick, playCountdownFinal]);
+  }, [onComplete, playCountdownTick, playCountdownFinal, speakCountdown]);
 
   return (
     <motion.div
@@ -45,7 +50,7 @@ export default function Countdown({ onComplete }: Props) {
             initial={{ scale: 0.3, opacity: 0, filter: 'blur(20px)' }}
             animate={{ scale: 1, opacity: 1, filter: 'blur(0px)' }}
             exit={{ scale: 2.5, opacity: 0, filter: 'blur(12px)' }}
-            transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
+            transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] as [number, number, number, number] }}
             className="orange-shimmer-text"
             style={{
               fontFamily: 'var(--font-display)',

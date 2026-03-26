@@ -5,12 +5,11 @@ export type RevealStep = 'idle' | 'countdown' | 'reveal3' | 'reveal2' | 'suspens
 interface RevealOrchestration {
   step: RevealStep;
   start: () => void;
-  advance: () => void;
 }
 
 const STEP_DURATIONS: Record<RevealStep, number> = {
   idle: 0,
-  countdown: 5800,
+  countdown: 6500,
   reveal3: 2500,
   reveal2: 3000,
   suspense: 3500,
@@ -20,11 +19,7 @@ const STEP_DURATIONS: Record<RevealStep, number> = {
 
 export function useRevealOrchestration(): RevealOrchestration {
   const [step, setStep] = useState<RevealStep>('idle');
-  const timerRef = useRef<ReturnType<typeof setTimeout>>();
-
-  const advance = useCallback(() => {
-    // not used in auto mode, kept for manual override
-  }, []);
+  const timerRef = useRef<ReturnType<typeof setTimeout> | undefined>(undefined);
 
   const start = useCallback(() => {
     setStep('countdown');
@@ -45,5 +40,5 @@ export function useRevealOrchestration(): RevealOrchestration {
     }, STEP_DURATIONS.countdown);
   }, []);
 
-  return { step, start, advance };
+  return { step, start };
 }

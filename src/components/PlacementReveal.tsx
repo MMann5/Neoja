@@ -2,6 +2,7 @@ import { useEffect, useRef } from 'react';
 import { motion } from 'motion/react';
 import type { Contestant } from '../data/contestants';
 import { useAudio } from '../hooks/useAudio';
+import { useVoice } from '../hooks/useVoice';
 import confetti from 'canvas-confetti';
 import CourtSVG from './CourtSVG';
 
@@ -49,12 +50,13 @@ const itemVariants = {
   visible: {
     opacity: 1,
     y: 0,
-    transition: { duration: 0.4, ease: [0.22, 1, 0.36, 1] },
+    transition: { duration: 0.4, ease: [0.22, 1, 0.36, 1] as const },
   },
 };
 
 export default function PlacementReveal({ contestant }: Props) {
   const { playRevealSting } = useAudio();
+  const { speakReveal } = useVoice();
   const fxDone = useRef(false);
 
   const colors = rankColors[contestant.rank];
@@ -64,6 +66,10 @@ export default function PlacementReveal({ contestant }: Props) {
     fxDone.current = true;
 
     playRevealSting(contestant.rank);
+    // Announce the player name with a slight delay
+    setTimeout(() => {
+      speakReveal(contestant.rank, contestant.name);
+    }, 500);
 
     if (contestant.rank === 1) {
       const flash = document.createElement('div');
@@ -147,8 +153,8 @@ export default function PlacementReveal({ contestant }: Props) {
         animate={entrance.animate}
         transition={{
           duration: contestant.rank === 1 ? 1.2 : 0.8,
-          ease: [0.22, 1, 0.36, 1],
-          ...(contestant.rank === 1 ? { scale: { type: 'spring', stiffness: 80, damping: 14, delay: 0.2 } } : {}),
+          ease: [0.22, 1, 0.36, 1] as [number, number, number, number],
+          ...(contestant.rank === 1 ? { scale: { type: 'spring' as const, stiffness: 80, damping: 14, delay: 0.2 } } : {}),
         }}
         className="relative z-10 w-[90vw] max-w-lg"
       >
