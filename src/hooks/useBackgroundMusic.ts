@@ -87,13 +87,9 @@ export function useBackgroundMusic() {
     }, ['D2', 'D2', 'F2', 'A2'], 'up');
     bassLoopRef.current.interval = '2n';
 
-    // Start pad chord
-    padRef.current.triggerAttack(['D3', 'F3', 'A3']);
-
-    // Start loops
+    // Start loops — drums only, no bass/pad drone
     kickLoopRef.current.start(0);
     hatLoopRef.current.start(0);
-    bassLoopRef.current.start(0);
 
     Tone.getTransport().start();
   }, []);
@@ -104,26 +100,24 @@ export function useBackgroundMusic() {
     const transport = Tone.getTransport();
 
     if (step === 'countdown') {
-      // Already set from start — light
+      // Light beat — already running
     } else if (step === 'reveal3') {
       transport.bpm.rampTo(100, 2);
-      kickLoopRef.current?.set({ interval: '4n' }); // Kick every quarter
+      kickLoopRef.current?.set({ interval: '4n' });
       if (kickRef.current) kickRef.current.volume.rampTo(-8, 1);
-      snareLoopRef.current?.start(); // Add snare
+      snareLoopRef.current?.start();
     } else if (step === 'reveal2') {
       transport.bpm.rampTo(110, 1.5);
       if (kickRef.current) kickRef.current.volume.rampTo(-6, 0.5);
       if (snareRef.current) snareRef.current.volume.rampTo(-12, 0.5);
       if (hihatRef.current) hihatRef.current.volume.rampTo(-18, 0.5);
     } else if (step === 'suspense') {
-      // DROP — kill drums, just bass + pad
+      // DROP — silence for the voice
       kickLoopRef.current?.stop();
       hatLoopRef.current?.stop();
       snareLoopRef.current?.stop();
-      if (bassRef.current) bassRef.current.volume.rampTo(-10, 1);
-      if (padRef.current) padRef.current.volume.rampTo(-18, 1);
     } else if (step === 'reveal1') {
-      // FULL BLAST
+      // FULL BLAST — drums only
       transport.bpm.rampTo(125, 0.5);
       kickLoopRef.current?.start();
       hatLoopRef.current?.start();
@@ -131,23 +125,14 @@ export function useBackgroundMusic() {
       if (kickRef.current) kickRef.current.volume.rampTo(-4, 0.3);
       if (snareRef.current) snareRef.current.volume.rampTo(-8, 0.3);
       if (hihatRef.current) hihatRef.current.volume.rampTo(-14, 0.3);
-      if (bassRef.current) bassRef.current.volume.rampTo(-8, 0.5);
-      if (padRef.current) padRef.current.volume.rampTo(-16, 0.5);
     } else if (step === 'podium') {
       // Stop everything
       kickLoopRef.current?.stop();
       hatLoopRef.current?.stop();
       snareLoopRef.current?.stop();
-      bassLoopRef.current?.stop();
-      if (bassRef.current) bassRef.current.volume.rampTo(-Infinity, 0.5);
-      if (padRef.current) padRef.current.volume.rampTo(-Infinity, 0.5);
-      if (kickRef.current) kickRef.current.volume.rampTo(-Infinity, 0.3);
-      if (hihatRef.current) hihatRef.current.volume.rampTo(-Infinity, 0.3);
-      if (snareRef.current) snareRef.current.volume.rampTo(-Infinity, 0.3);
       setTimeout(() => {
         Tone.getTransport().stop();
-        padRef.current?.releaseAll();
-      }, 800);
+      }, 300);
     }
   }, []);
 
